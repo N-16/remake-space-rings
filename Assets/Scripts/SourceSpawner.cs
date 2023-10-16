@@ -31,7 +31,7 @@ public class SourceSpawner : MonoBehaviour
 
     void Start()
     {   
-        currentPattern = PatternPlan(true);
+        currentPattern = PatternPlan(true, noOfSpawned);
         for(int i = 0;i < currentPattern.length; i++){
             PatternSpawnin();
         }
@@ -75,14 +75,14 @@ public class SourceSpawner : MonoBehaviour
         SpawnTraffic(spawnX, spawnY, spawnZ);*/
     }
 
-    Pattern PatternPlan(bool restPattern = false)//creatin pattern
+    Pattern PatternPlan(bool restPattern = false, int length = 0)//creatin pattern
     {
         Pattern p = new Pattern();
         if (restPattern)
         {
             p.xOffset = 0f;
             p.yOffset = 0f;
-            p.length = Random.Range(minPatternLenght, maxPatternLength);
+            p.length = length !=0 ? length : Random.Range(minPatternLenght, maxPatternLength);
             ChangeRestIndex();
             Debug.Log("rest");
             return p;
@@ -93,7 +93,7 @@ public class SourceSpawner : MonoBehaviour
         Debug.Log(noise);
         p.xOffset = signX * Mathf.Sqrt(Random.Range(0, noise * noise));
         p.yOffset = signY * Mathf.Sqrt(noise * noise - p.xOffset * p.xOffset);
-        p.length = Random.Range(minPatternLenght, maxPatternLength);//randomly
+        p.length = length !=0 ? length : Random.Range(minPatternLenght, maxPatternLength);//randomly
         return p;
     }
     /*void SpawnTraffic(float centreX, float centreY, float centreZ)
