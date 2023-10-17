@@ -58,4 +58,7 @@ public class ShipMovement : MonoBehaviour
     public void ResetFwdSpeed(){
         fwdSpeed = defaultFwdSpeed;
     }
+    public float GetFwdSpeed(){
+        return actualSpeed;
+    }
 }

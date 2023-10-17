@@ -13,12 +13,16 @@ public class AgentScript : Agent{
     [SerializeField] private Rigidbody shipRB;
     [SerializeField] private ShipChargeController shipCharge;
     [SerializeField] private SceneLoader sceneLoader;
+    [SerializeField] private ShipMovement shipMovement;
     private SourceSpawner spawner;
     public override void OnEpisodeBegin(){
         Debug.Log("ON EPISODE BEGIN");
         //reload source scene (maybe async)
-        sceneLoader.UnloadScene("GameView");
-        sceneLoader.LoadScene("GameView");
+        bool sceneOperationCompleted = false;
+        sceneLoader.ReloadScene("GameView", ()=>sceneOperationCompleted=true);
+        for(int i = 0; i <1000000; i++){
+        print(sceneOperationCompleted);
+        }
         //cache spawner
         spawner = GameObject.FindWithTag("Spawner").GetComponent<SourceSpawner>();
         //switch input controller
@@ -50,7 +54,7 @@ public class AgentScript : Agent{
         //pass input to input manager
         shipInputManager.SetAgentInput(actions.DiscreteActions[0], actions.DiscreteActions[1]);
         //if z velocty == 0: end episode and punish
-        if (shipRB.velocity.z < 0.1f){
+        if (shipMovement.GetFwdSpeed() < 0.1f){
             AddReward(-10f);
             EndEpisode();
         }
@@ -64,6 +68,6 @@ public class AgentScript : Agent{
         var actions = actionsOut.DiscreteActions;
         Debug.Log("heuristic");
         actions[0] = (int)Input.GetAxisRaw("Horizontal");
-        actions[1] = (int)Input.GetAxisRaw("Horizontal");
+        actions[1] = (int)Input.GetAxisRaw("Vertical");
     }
 }

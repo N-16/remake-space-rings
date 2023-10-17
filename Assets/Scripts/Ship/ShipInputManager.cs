@@ -18,7 +18,7 @@ public class ShipInputManager : MonoBehaviour{
         if (inputController == InputController.Human){
             Debug.LogError("Can't Set agent input cuz Input Control is set to human");
         }
-        if (horizontal != 1 || horizontal != -1 || vertical != 1 || vertical != -1 || horizontal != 0 || vertical != 0){
+        if (horizontal != 1f || horizontal != -1f || vertical != 1f || vertical != -1f || horizontal != 0f || vertical != 0f){
             Debug.LogError(horizontal + " " + vertical);
         }
         agentHorizontal = horizontal;
