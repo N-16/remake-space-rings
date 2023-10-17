@@ -8,6 +8,7 @@ public class ShipMovement : MonoBehaviour
     [SerializeField] private float fwdSpeed = 350f;//Forward speed
     [SerializeField] private float steerForce = 2.5f//Force Component to steer
                                 ,rotResetSpeed = 2f;//AI Reset Speed
+    [SerializeField] private ShipInputManager shipInputManager;
     private float actualSteerForce;
     private float defaultSteerForce;
     private float actualSpeed;
@@ -32,7 +33,7 @@ public class ShipMovement : MonoBehaviour
     }
 
     Vector2 getInput(){
-        return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        return new Vector2(shipInputManager.GetInput().Item1, shipInputManager.GetInput().Item2);
     }
 
     void SteerShip(Vector2 steerInput)

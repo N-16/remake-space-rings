@@ -12,7 +12,7 @@ public class Source : MonoBehaviour{
     }
 
     void Update(){
-        if (ship.position.z > transform.position.z && !coroutineStarted){
+        if (ship.position.z > thisTransform.position.z && !coroutineStarted){
             coroutineStarted = true;
             StartCoroutine(DisableRoutine(1f));
         }

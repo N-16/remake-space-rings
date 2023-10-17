@@ -12,7 +12,7 @@ public class SourceSpawner : MonoBehaviour
     [SerializeField] private int maxPatternLength = 10;
     [SerializeField] private int minPatternLenght = 4;
     [SerializeField] private int noOfSpawned = 12;//spawned
-    [SerializeField] private Transform ship;//ship transform
+    private Transform ship;//ship transform
     [SerializeField] private SourcePool sourcePool;
 
     private Pattern currentPattern;//current pattern(structure see at the end)
@@ -27,13 +27,15 @@ public class SourceSpawner : MonoBehaviour
     [SerializeField] private GameObject sourceParent;
     private bool spawnTraffic = false;
     private int restIndex = 2;
+    private Queue<GameObject> sourceQueue = new Queue<GameObject>();
 
 
     void Start()
     {   
+        ship = GameObject.FindWithTag("Player").transform;
         currentPattern = PatternPlan(true, noOfSpawned);
         for(int i = 0;i < currentPattern.length; i++){
-            PatternSpawnin();
+            PatternSpawnin(false);
         }
     }
     void Update()
@@ -50,25 +52,35 @@ public class SourceSpawner : MonoBehaviour
                 currentPattern = PatternPlan();
             }
         }
-        if (ship.position.z > threshold)//do stuff.......
+        if (ship.position.z > sourceQueue.Peek().transform.position.z)//do stuff.......
         {
             PatternSpawnin();
-            threshold += seperation;//increase threshold
+            //threshold += seperation;//increase threshold
         }
  
     }
 
-    void Spawn(Vector3 pos)//beacause it looks cleaner
+    void Spawn(Vector3 pos, bool dequeue = true)//beacause it looks cleaner
     {
-       //var source = Instantiate(prefab, new Vector3(x, y, z), Quaternion.Euler(90f, 0f, 0f));
-       //source.transform.parent = sourceParent.transform;
-       sourcePool.SpawnSource(pos);
+        //var source = Instantiate(prefab, new Vector3(x, y, z), Quaternion.Euler(90f, 0f, 0f));
+        //source.transform.parent = sourceParent.transform;
+        if (dequeue)
+            StartCoroutine(DisableRoutine(0.5f, sourceQueue.Dequeue()));
+        sourceQueue.Enqueue(sourcePool.SpawnSource(pos));
+        //Testing queue implementation
+        float lastZ = sourceQueue.Peek().transform.position.z;
+        foreach(GameObject src in sourceQueue){
+            if (lastZ > src.transform.position.z){
+                Debug.LogError("Queue Failed :(");
+            }
+            lastZ = src.transform.position.z;
+        }
     }
 
-    void PatternSpawnin()//spawning acc to current pattern
-    {
+    //spawning acc to current pattern
+    void PatternSpawnin(bool dequeue = true){
         Vector3 spawnPos = new Vector3(lastSourcePos.x + currentPattern.xOffset, lastSourcePos.y + currentPattern.yOffset, lastSourcePos.z + seperation);
-        Spawn(spawnPos);
+        Spawn(spawnPos, dequeue);
         lastSourcePos = spawnPos;
         patternSpawnIndex += 1;
         /*if (spawnTraffic)
@@ -123,6 +135,13 @@ public class SourceSpawner : MonoBehaviour
             restIndex = Random.Range(2, 5);
     
     }
+    IEnumerator DisableRoutine(float time, GameObject objToDisable){
+        float startTime = Time.time;
+        while(Time.time - startTime < time){
+            yield return null;
+        }
+        objToDisable.SetActive(false);
+    } 
     
 }
 
