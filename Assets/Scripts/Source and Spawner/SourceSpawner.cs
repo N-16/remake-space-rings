@@ -68,13 +68,13 @@ public class SourceSpawner : MonoBehaviour
             StartCoroutine(DisableRoutine(0.5f, sourceQueue.Dequeue()));
         sourceQueue.Enqueue(sourcePool.SpawnSource(pos));
         //Testing queue implementation
-        float lastZ = sourceQueue.Peek().transform.position.z;
+        /*float lastZ = sourceQueue.Peek().transform.position.z;
         foreach(GameObject src in sourceQueue){
             if (lastZ > src.transform.position.z){
                 Debug.LogError("Queue Failed :(");
             }
             lastZ = src.transform.position.z;
-        }
+        }*/
     }
 
     //spawning acc to current pattern
@@ -142,6 +142,9 @@ public class SourceSpawner : MonoBehaviour
         }
         objToDisable.SetActive(false);
     } 
+    public Queue<GameObject> GetQueue(){
+        return sourceQueue;
+    }
     
 }
 

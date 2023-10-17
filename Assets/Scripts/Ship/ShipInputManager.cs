@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShipInputManager : MonoBehaviour{
     private float agentHorizontal = 0f, agentVertical= 0f;
-    private InputController inputController = InputController.Human;
+    [SerializeField] private InputController inputController = InputController.Human;
     
     public (float,float) GetInput(){
         if (inputController == InputController.Human){
@@ -17,6 +17,9 @@ public class ShipInputManager : MonoBehaviour{
     public void SetAgentInput(float horizontal, float vertical){
         if (inputController == InputController.Human){
             Debug.LogError("Can't Set agent input cuz Input Control is set to human");
+        }
+        if (horizontal != 1 || horizontal != -1 || vertical != 1 || vertical != -1 || horizontal != 0 || vertical != 0){
+            Debug.LogError(horizontal + " " + vertical);
         }
         agentHorizontal = horizontal;
         agentVertical = vertical;
