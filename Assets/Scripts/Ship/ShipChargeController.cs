@@ -39,4 +39,11 @@ public class ShipChargeController : MonoBehaviour
     public float GetCharge(){
         return charge;
     }
+    public void FullRecharge(){
+        charge = 100f;
+    }
+    public void Reset(){
+        FullRecharge();
+        discharged = false;
+    }
 }
