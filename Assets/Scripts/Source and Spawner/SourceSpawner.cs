@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,12 +29,13 @@ public class SourceSpawner : MonoBehaviour
     private bool spawnTraffic = false;
     private int restIndex = 2;
     private Queue<GameObject> sourceQueue = new Queue<GameObject>();
+    public event Action<bool> onShipCross;
 
 
     void Start()
     {   
         ship = GameObject.FindWithTag("Player").transform;
-        currentPattern = PatternPlan(true, noOfSpawned);
+        currentPattern = PatternPlan(false, noOfSpawned);
         for(int i = 0;i < currentPattern.length; i++){
             PatternSpawnin(false);
         }
@@ -94,18 +96,18 @@ public class SourceSpawner : MonoBehaviour
         {
             p.xOffset = 0f;
             p.yOffset = 0f;
-            p.length = length !=0 ? length : Random.Range(minPatternLenght, maxPatternLength);
+            p.length = length !=0 ? length : UnityEngine.Random.Range(minPatternLenght, maxPatternLength);
             ChangeRestIndex();
-            Debug.Log("rest");
+            //Debug.Log("rest");
             return p;
         }
-        int signX = Random.Range(1, 3) == 1 ? -1 : 1;//left or right????
-        int signY = Random.Range(1, 3) == 1 ? -1 : 1;//up or down???????
-        int noise = Random.Range(minPatternOffset, maxPatternOffset);
-        Debug.Log(noise);
-        p.xOffset = signX * Mathf.Sqrt(Random.Range(0, noise * noise));
+        int signX = UnityEngine.Random.Range(1, 3) == 1 ? -1 : 1;//left or right????
+        int signY = UnityEngine.Random.Range(1, 3) == 1 ? -1 : 1;//up or down???????
+        int noise = UnityEngine.Random.Range(minPatternOffset, maxPatternOffset);
+        //Debug.Log(noise);
+        p.xOffset = signX * Mathf.Sqrt(UnityEngine.Random.Range(0, noise * noise));
         p.yOffset = signY * Mathf.Sqrt(noise * noise - p.xOffset * p.xOffset);
-        p.length = length !=0 ? length : Random.Range(minPatternLenght, maxPatternLength);//randomly
+        p.length = length !=0 ? length : UnityEngine.Random.Range(minPatternLenght, maxPatternLength);//randomly
         return p;
     }
     /*void SpawnTraffic(float centreX, float centreY, float centreZ)
@@ -127,19 +129,21 @@ public class SourceSpawner : MonoBehaviour
 
     void ChangeRestIndex()
     {
-        if (Random.Range(1, 26) == 2)
+        if (UnityEngine.Random.Range(1, 26) == 2)
         {
-            restIndex = Random.Range(13, 17);
+            restIndex = UnityEngine.Random.Range(13, 17);
         }
         else
-            restIndex = Random.Range(2, 5);
+            restIndex = UnityEngine.Random.Range(2, 5);
     
     }
     IEnumerator DisableRoutine(float time, GameObject objToDisable){
         float startTime = Time.time;
+        onShipCross?.Invoke(objToDisable.GetComponentInChildren<SoruceUtilizationTracker>().GetUtilization());
         while(Time.time - startTime < time){
             yield return null;
         }
+        
         objToDisable.SetActive(false);
     } 
     public Queue<GameObject> GetQueue(){

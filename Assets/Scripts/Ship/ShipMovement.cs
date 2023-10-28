@@ -64,4 +64,7 @@ public class ShipMovement : MonoBehaviour
     public float GetFwdSpeed(){
         return fwdSpeed;
     }
+    public void SetActualFwdSpeed(float speed){
+        actualSpeed = speed;
+    }
 }

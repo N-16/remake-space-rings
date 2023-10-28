@@ -27,7 +27,7 @@ public class ShipBehaviour : MonoBehaviour
     public void Reset(){
         //reset velocities
         shipRB.velocity = Vector3.zero;
-        PowerOn();
+        movementController.SetActualFwdSpeed(0f);
         shipRB.angularVelocity = Vector3.zero;
 
         //reset rotation
@@ -35,7 +35,7 @@ public class ShipBehaviour : MonoBehaviour
 
         //reset position
         shipTransform.position = startPosition;
+        PowerOn();
         chargeController.Reset();
-        
     }
 }

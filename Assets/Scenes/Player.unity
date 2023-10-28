@@ -817,7 +817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009399144422754480, guid: 4b0de58f5fc8d2a4aae1e33089b0665e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -61
+      value: -211
       objectReference: {fileID: 0}
     - target: {fileID: 3009399144422754480, guid: 4b0de58f5fc8d2a4aae1e33089b0665e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -938,7 +938,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 172022580820536677, guid: dbfd76f353b5ac302b7237563ba34393, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -61
+      value: -211
       objectReference: {fileID: 0}
     - target: {fileID: 172022580820536677, guid: dbfd76f353b5ac302b7237563ba34393, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1051,7 +1051,7 @@ PrefabInstance:
       objectReference: {fileID: 208366085}
     - target: {fileID: 2195889428800572752, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: fwdSpeed
-      value: 350
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 2195889428800572752, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: steerForce
@@ -1071,7 +1071,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3520939535556825995, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -50
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 3520939535556825995, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1117,6 +1117,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1047042751}
+    - target: {fileID: 4515925069608619069, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4857460324441150135, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1136,6 +1140,34 @@ PrefabInstance:
     - target: {fileID: 7468980644639548709, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: m_Name
       value: Ship
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5044131768821794828}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShipCrossReward
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AgentScript, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121986885882041706, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
+      propertyPath: onShipCrossSource.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 9049612346646899130, guid: 88017b17648f7cfe083973a55bfee0e8, type: 3}
       propertyPath: m_Mesh
@@ -1241,18 +1273,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 24
+    VectorObservationSize: 14
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0300000003000000
-    VectorActionSize: 0300000003000000
+      BranchSizes: 09000000
+    VectorActionSize: 09000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: Ship
   TeamId: 0
   m_UseChildSensors: 1
@@ -1270,7 +1302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 12
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
 --- !u!114 &5044131768821794836 stripped
 MonoBehaviour:

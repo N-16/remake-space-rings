@@ -14,18 +14,67 @@ public class ShipInputManager : MonoBehaviour{
         return (agentHorizontal, agentVertical);
     }
 
-    public void SetAgentInput(float horizontal, float vertical){
-        if (inputController == InputController.Human){
-            Debug.LogError("Can't Set agent input cuz Input Control is set to human");
+    public void SetAgentInput(int action){
+        switch(action){
+            case 0:
+                //no input 
+                agentHorizontal = 0f;
+                agentVertical = 0f;
+                break;
+            case 1:
+                //left 
+                agentHorizontal = -1f;
+                agentVertical = 0f;
+                break;
+            case 2:
+                //right
+                agentHorizontal = 1f;
+                agentVertical = 0f;
+                break;
+            case 3:
+                //up
+                agentHorizontal = 0f;
+                agentVertical = -1f;
+                break;
+            case 4:
+                //down
+                agentHorizontal = 0f;
+                agentVertical = 1f;
+                break;
+            case 5:
+                //left-up 
+                agentHorizontal = -1f;
+                agentVertical = -1f;
+                break;
+            case 6:
+                //left-down
+                agentHorizontal = -1f;
+                agentVertical = 1f;
+                break;
+            case 7:
+                //right-up
+                agentHorizontal = 1f;
+                agentVertical = -1f;
+                break;
+            case 8:
+                //right-down
+                agentHorizontal = 1f;
+                agentVertical = 1f;
+                break;
         }
-        /*if (horizontal != 1f || horizontal != -1f || vertical != 1f || vertical != -1f || horizontal != 0f || vertical != 0f){
-            Debug.LogError(horizontal + " " + vertical);
-        }*/
-        agentHorizontal = horizontal;
-        agentVertical = vertical;
     }
     public void SetControl(InputController controller){
         inputController = controller;
+    }
+    List<(float,float)> axisInput = new List<(float,float)> {(0f, 0f), (-1f, 0f), (1f, 0f), (0f, -1f), (0f, 1f), (-1f, -1f), (-1f, 1f), (1f, -1f), (1f,1f)};
+    public (float, float) AgentToAxis(int agentInput){
+        if (agentInput < 0 || agentInput > 8){
+            Debug.LogError("invalid agent input");
+        }
+        return axisInput[agentInput];
+    }
+    public int AxisToAgent(float horizontal, float vertical){
+        return axisInput.IndexOf((horizontal, vertical));
     }
 }
 
@@ -33,5 +82,7 @@ public enum InputController{
         Human, 
         Agent
 }
+
+
 
 
