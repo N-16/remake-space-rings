@@ -65,13 +65,13 @@ public class AgentScript : Agent{
         if (shipCrossReward != CrossReward.NoActivity){
             if (shipCrossReward == CrossReward.Cross){
                 shipCrossReward = CrossReward.NoActivity;
-                AddReward(5f);
+                AddReward(10f);
                 Debug.Log("Reward: " + GetCumulativeReward());
             }
             else{
                 shipCrossReward = CrossReward.NoActivity;
                 //Queue<GameObject> sourceQ = spawner.GetQueue();
-                AddReward(-5f);
+                //AddReward(-5f);
                 Debug.Log("Reward: " + GetCumulativeReward());
                 //EndEpisode();
             }
