@@ -18,6 +18,10 @@ public class AgentScript : Agent{
     private SourceSpawner spawner;
     private CrossReward shipCrossReward = CrossReward.NoActivity;
 
+    void Start(){
+        Debug.unityLogger.logEnabled = false;
+    }
+
     public override void OnEpisodeBegin(){
         shipBehaviour.Reset();
         //reload source scene (maybe async)
@@ -37,11 +41,14 @@ public class AgentScript : Agent{
         //for now: 
         //add 6 source position (z position as differnce)
         Queue<GameObject> sourceQ = spawner.GetQueue();
-        for (int i = 0; i < 3; i++){
+        /*for (int i = 0; i < 3; i++){
             Vector3 position = sourceQ.ElementAt(i).transform.position;
             position.z -= shipTransform.position.z;
             sensor.AddObservation(position);
-        }
+        }*/
+        Vector3 position = sourceQ.Peek().transform.position;
+        position.z -= shipTransform.position.z;
+        sensor.AddObservation(position);
         //ship position (except z position)
         sensor.AddObservation(shipTransform.position.x);
         sensor.AddObservation(shipTransform.position.y);
@@ -58,14 +65,14 @@ public class AgentScript : Agent{
         //if z velocty == 0: end episode and punish
         if (shipCharge.GetCharge() == 0f){
             Debug.Log("Reward Deducted");
-            AddReward(-100f);
+            AddReward(-10f);
             EndEpisode();
         }
         //reward on crossing source
         if (shipCrossReward != CrossReward.NoActivity){
             if (shipCrossReward == CrossReward.Cross){
                 shipCrossReward = CrossReward.NoActivity;
-                AddReward(10f);
+                AddReward(5f);
                 Debug.Log("Reward: " + GetCumulativeReward());
             }
             else{
