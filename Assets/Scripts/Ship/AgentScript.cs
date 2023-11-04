@@ -17,6 +17,7 @@ public class AgentScript : Agent{
     [SerializeField] private GameObject spawnerGameobject;
     private SourceSpawner spawner;
     private CrossReward shipCrossReward = CrossReward.NoActivity;
+    private float cacheDistance = 100000f;
 
     void Start(){
         Debug.unityLogger.logEnabled = false;
@@ -41,14 +42,14 @@ public class AgentScript : Agent{
         //for now: 
         //add 6 source position (z position as differnce)
         Queue<GameObject> sourceQ = spawner.GetQueue();
-        /*for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 2; i++){
             Vector3 position = sourceQ.ElementAt(i).transform.position;
             position.z -= shipTransform.position.z;
             sensor.AddObservation(position);
-        }*/
-        Vector3 position = sourceQ.Peek().transform.position;
+        }
+        /*Vector3 position = sourceQ.Peek().transform.position;
         position.z -= shipTransform.position.z;
-        sensor.AddObservation(position);
+        sensor.AddObservation(position);*/
         //ship position (except z position)
         sensor.AddObservation(shipTransform.position.x);
         sensor.AddObservation(shipTransform.position.y);
@@ -72,7 +73,7 @@ public class AgentScript : Agent{
         if (shipCrossReward != CrossReward.NoActivity){
             if (shipCrossReward == CrossReward.Cross){
                 shipCrossReward = CrossReward.NoActivity;
-                AddReward(5f);
+                AddReward(1f);
                 Debug.Log("Reward: " + GetCumulativeReward());
             }
             else{
@@ -84,6 +85,11 @@ public class AgentScript : Agent{
             }
             
         }
+        //Add reward if it closer to the upcoming ring
+        Transform nextSource = spawner.GetQueue().Peek().transform;
+        AddReward(cacheDistance - Vector2.Distance(shipTransform.position, nextSource.position));
+        //Add reward for every step it exist
+        AddReward(0.01f);
         
         
     }
