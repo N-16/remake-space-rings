@@ -12,13 +12,11 @@ public class ShipChargeController : MonoBehaviour
     private float charge = 100f;
     [SerializeField] private UnityEvent onDischarge;
     [SerializeField] private UnityEvent onPowerOn;
-    //[SerializeField] private UnityEvent onShipCrossSource;
     bool discharged = false;
 
     void OnTriggerEnter(Collider other){
         if ((sourceLayer & (1 << other.gameObject.layer)) != 0){
             Recharge();
-            //onShipCrossSource?.Invoke();
             other.gameObject.GetComponent<SoruceUtilizationTracker>().MarkUtilize();
         }
     }

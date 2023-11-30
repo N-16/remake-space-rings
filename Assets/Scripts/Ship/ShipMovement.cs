@@ -5,19 +5,18 @@ using UnityEngine;
 public class ShipMovement : MonoBehaviour
 {
     private Rigidbody ship;//The ship
-    [SerializeField] private float fwdSpeed = 350f;//Forward speed
-    [SerializeField] private float steerForce = 2.5f//Force Component to steer
+    private float fwdSpeed = 250f;//Forward speed
+    private float steerForce = 7f//Force Component to steer
                                 ,rotResetSpeed = 2f;//AI Reset Speed
     [SerializeField] private ShipInputManager shipInputManager;
     private float actualSteerForce;
-    private float defaultSteerForce;
+    private float defaultSteerForce = 7f;
     private float actualSpeed;
-    private float defaultFwdSpeed;
+    private float defaultFwdSpeed = 250f;
      
     void Start(){
         ship = GetComponent<Rigidbody>();
-        defaultSteerForce = steerForce; 
-        defaultFwdSpeed = fwdSpeed;
+    
     }
 
 

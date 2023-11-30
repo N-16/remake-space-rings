@@ -17,7 +17,8 @@ public class AgentScript : Agent{
     [SerializeField] private GameObject spawnerGameobject;
     private SourceSpawner spawner;
     private CrossReward shipCrossReward = CrossReward.NoActivity;
-    private float cacheDistance = 100000f;
+    private float cacheDistance = 0f;
+    [SerializeField] private ScoreUI scoreUI;
 
     void Start(){
         Debug.unityLogger.logEnabled = false;
@@ -25,79 +26,64 @@ public class AgentScript : Agent{
 
     public override void OnEpisodeBegin(){
         shipBehaviour.Reset();
-        //reload source scene (maybe async)
         Destroy(spawnerGameobject);
         spawnerGameobject = Instantiate(spawnerPrefab);
         //cache spawner
         spawner = spawnerGameobject.GetComponent<SourceSpawner>();
         spawner.onShipCross += ShipCrossReward;
-        //switch input controller
-        //shipInputManager.SetControl(InputController.Agent); 
-        //reset ship position, velocity
-
     }
 
     public override void CollectObservations(VectorSensor sensor){
-        //Debug.Log("Collecting");
-        //for now: 
-        //add 6 source position (z position as differnce)
+
         Queue<GameObject> sourceQ = spawner.GetQueue();
         for (int i = 0; i < 2; i++){
             Vector3 position = sourceQ.ElementAt(i).transform.position;
             position.z -= shipTransform.position.z;
             sensor.AddObservation(position);
         }
-        /*Vector3 position = sourceQ.Peek().transform.position;
-        position.z -= shipTransform.position.z;
-        sensor.AddObservation(position);*/
-        //ship position (except z position)
         sensor.AddObservation(shipTransform.position.x);
         sensor.AddObservation(shipTransform.position.y);
-        //ship velocity
         sensor.AddObservation(shipRB.velocity);
-        //charge
-        //sensor.AddObservation(shipCharge.GetCharge());
     }
 
     public override void OnActionReceived(ActionBuffers actions){
-        //pass input to input manager
-        //Debug.Log((actions.DiscreteActions[0] - 1) + "X" + (actions.DiscreteActions[1] - 1));
+
         shipInputManager.SetAgentInput(actions.DiscreteActions[0]);
-        //if z velocty == 0: end episode and punish
         if (shipCharge.GetCharge() == 0f){
-            Debug.Log("Reward Deducted");
-            AddReward(-10f);
-            EndEpisode();
+
+
+            if (shipRB.velocity.z < 0.5f){
+                AddReward(-10f);
+                EndEpisode();
+            }
         }
         //reward on crossing source
         if (shipCrossReward != CrossReward.NoActivity){
             if (shipCrossReward == CrossReward.Cross){
                 shipCrossReward = CrossReward.NoActivity;
                 AddReward(1f);
-                Debug.Log("Reward: " + GetCumulativeReward());
             }
             else{
                 shipCrossReward = CrossReward.NoActivity;
-                //Queue<GameObject> sourceQ = spawner.GetQueue();
-                //AddReward(-5f);
-                Debug.Log("Reward: " + GetCumulativeReward());
-                //EndEpisode();
             }
             
         }
         //Add reward if it closer to the upcoming ring
         Transform nextSource = spawner.GetQueue().Peek().transform;
-        AddReward(cacheDistance - Vector2.Distance(shipTransform.position, nextSource.position));
-        //Add reward for every step it exist
-        AddReward(0.01f);
-        
+        if (cacheDistance < Vector2.Distance(new Vector2(shipTransform.position.x, shipTransform.position.y),
+                                            new Vector2 (nextSource.position.x, nextSource.position.y))){
+            AddReward(-0.2f);
+        }
+        else{
+            AddReward(0.1f);
+        }
+        cacheDistance = Vector2.Distance(new Vector2(shipTransform.position.x, shipTransform.position.y),
+                                            new Vector2 (nextSource.position.x, nextSource.position.y));
+        scoreUI.SetText("Reward : " + GetCumulativeReward().ToString());
         
     }
     public override void Heuristic(in ActionBuffers actionsOut){
-        //base.Heuristic(actionsOut);
-        //switch input
         var actions = actionsOut.DiscreteActions;
-        //Debug.Log("heuristic");
         actions[0] = shipInputManager.AxisToAgent(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
     public void ShipCrossReward(bool cross){
@@ -108,9 +94,6 @@ public class AgentScript : Agent{
         else{
             shipCrossReward = CrossReward.NoCross;
         }
-        /*float reward = cross ? 5f : -5f;
-        AddReward(reward);
-        Debug.Log("added reward " + reward);*/
     }
     public enum CrossReward{
         NoActivity, Cross, NoCross

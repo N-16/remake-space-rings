@@ -9,12 +9,15 @@ public class ShipBehaviour : MonoBehaviour
     [SerializeField] private Rigidbody shipRB;
 
     [SerializeField] private Transform shipTransform;
+    [SerializeField] private SourceSpawner spawner;
+    [SerializeField] ScoreUI scoreui;
     private Vector3 startPosition;
 
     void Start(){
         startPosition = shipTransform.position;
     }
     public void Shutdown(){
+        Debug.Log("Shutdown called");
         movementController.SetSteerForce(0f);
         movementController.SetFwdSpeed(0f);
     }
@@ -38,4 +41,5 @@ public class ShipBehaviour : MonoBehaviour
         PowerOn();
         chargeController.Reset();
     }
+    
 }
